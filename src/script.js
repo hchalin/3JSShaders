@@ -20,14 +20,22 @@ const scene = new THREE.Scene()
  * Test mesh
  */
 // Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+// const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+const geometry = new THREE.SphereGeometry(.5,40)
 
+let uTime;
+console.log(uTime);
 // Material
 const material = new THREE.ShaderMaterial({
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
-    side: THREE.DoubleSide
-}) 
+    side: THREE.DoubleSide,
+    uniforms: {
+        uTime: uTime,
+    },
+    needsUpdate: true,
+
+})
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
@@ -80,16 +88,26 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
+const clock = new THREE.Clock();
+
 const tick = () =>
 {
     // Update controls
     controls.update()
+
+    const elapsedTime = clock.getElapsedTime();
+    uTime = elapsedTime;
+    // material.update()
+    // console.log(Math.floor(elapsedTime));
+
 
     // Render
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
+
+    //
 }
 
 tick()
