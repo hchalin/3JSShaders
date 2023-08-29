@@ -2,6 +2,7 @@ varying vec2 vUv;
 
 // Uniforms
 uniform float uTime;
+uniform int uGeometryType;
 
 // NO SIMICOLON AFTER A #define!!!!
 #define PI 3.1415926535897932384626433832795
@@ -58,6 +59,7 @@ float random(vec2 st){
     return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.543123);
 }
 
+
 vec2 rotate(vec2 uv, float rotation, vec2 mid)
 {
     return vec2(
@@ -66,16 +68,30 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid)
     );
 }
 
-
 void main(){
+int type = uGeometryType;
+
+if (type == 0){ // Box
 
      vec3 blackColor = vec3(0.0);
-    float modulation = sin(uTime);
+    float modulation = sin(uTime / 5.0);
     float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0 * modulation)) ;
     vec3 uvColor = vec3(vUv, 1.0);
     vec3 mixedColor = mix(blackColor, uvColor, strength) ;
     gl_FragColor = vec4(mixedColor, 1.0);
+} else if (type == 1){ // Plane
+
+ vec3 blackColor = vec3(0.0);
+    float modulation = sin(uTime/ 50.0 );
+    float strength =  step(.99, sin(cnoise(vUv * 10.0) * 20.0 * modulation)) ;
+    // float strength =  step(.9,  sin(cnoise(vUv * 10.0)) * 40.0 * modulation);
+    vec3 uvColor = vec3(vUv, 1.0);
+    vec3 mixedColor = mix(blackColor, uvColor, strength) ;
+    gl_FragColor = vec4(mixedColor, 1.0);
 }
+
+}
+
 
 
 // void main()

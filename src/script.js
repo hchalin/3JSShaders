@@ -20,29 +20,61 @@ const scene = new THREE.Scene()
  * Test mesh
  */
 // Geometry
-// const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
-const geometry = new THREE.SphereGeometry(.5,40)
+const planeGeometry = new THREE.PlaneGeometry(window.innerWidth/30, window.innerHeight /30, 32, 32)
+// const sphereGeometry = new THREE.SphereGeometry(.5,40)
+const boxGeometry = new THREE.BoxGeometry(1,1,1)
 
 
 
 
 
-// Material
-const material = new THREE.ShaderMaterial({
+/**
+ * MATERIALS
+ */
+const boxMaterial = new THREE.ShaderMaterial({
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
     side: THREE.DoubleSide,
     uniforms: {
-        uTime: {value: 0},
+        uTime: {value: 1.0},
+        uGeometryType: {value: 0}
     },
 
 
 })
 
-// Mesh
-const mesh = new THREE.Mesh(geometry, material)
-material.needsUpdate = true;
-scene.add(mesh)
+//Box
+const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial)
+boxMesh.rotateY(Math.PI * 0.25)
+boxMesh.rotateX(Math.PI * 0.25)
+
+
+
+/**
+ * MESHES
+ */
+//Plane
+
+const planeMaterial = new THREE.ShaderMaterial({
+    vertexShader: testVertexShader,
+    fragmentShader: testFragmentShader,
+    side: THREE.DoubleSide,
+    uniforms: {
+        uTime: {value: 1.0},
+        uGeometryType: {value: 1}
+    },
+
+
+})
+
+const planeMesh = new THREE.Mesh(planeGeometry,
+    planeMaterial)
+    planeMesh.position.set(0,0,-2)
+
+
+
+//Scene add
+scene.add(boxMesh, planeMesh)
 
 /**
  * Sizes
@@ -72,7 +104,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0.25, - 0.25, 1)
+camera.position.set(0.25, - 0.25, 3)
 scene.add(camera)
 
 // Controls
@@ -100,7 +132,9 @@ const tick = () =>
     controls.update()
 
     const elapsedTime = clock.getElapsedTime();
-    material.uniforms.uTime.value = elapsedTime
+    boxMaterial.uniforms.uTime.value = elapsedTime
+    planeMaterial.uniforms.uTime.value = elapsedTime
+
 
     // console.log(Math.floor(elapsedTime));
 
