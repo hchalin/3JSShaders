@@ -67,8 +67,19 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid)
 }
 
 
-void main()
-{
+void main(){
+
+     vec3 blackColor = vec3(0.0);
+    float modulation = sin(uTime);
+    float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0 * modulation)) ;
+    vec3 uvColor = vec3(vUv, 1.0);
+    vec3 mixedColor = mix(blackColor, uvColor, strength) ;
+    gl_FragColor = vec4(mixedColor, 1.0);
+}
+
+
+// void main()
+// {
     // Pattern 3
     // float strength = vUv.x;
 
@@ -273,13 +284,15 @@ void main()
     // float strength = sin(cnoise(vUv * 10.0) * 20.0);
 
     // Pattern 50
-    float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0)) ;
+    // float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0)) ;
 
     // This is what is returned in the main fn =====
     // Colors
-    vec3 blackColor = vec3(0.0);
-    float modulation = sin(uTime);
-    vec3 uvColor = vec3(vUv, 1.0);
-    vec3 mixedColor = mix(blackColor, uvColor, strength) ;
-    gl_FragColor = vec4(mixedColor, 1.0);
-}
+
+    // vec3 blackColor = vec3(0.0);
+    // float modulation = sin(uTime);
+    // vec3 uvColor = vec3(vUv, 1.0);
+    // vec3 mixedColor = mix(blackColor, uvColor, strength) ;
+    // uncomment below
+    // gl_FragColor = vec4(mixedColor, 1.0);
+// }

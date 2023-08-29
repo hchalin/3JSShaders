@@ -23,22 +23,25 @@ const scene = new THREE.Scene()
 // const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 const geometry = new THREE.SphereGeometry(.5,40)
 
-let uTime;
-console.log(uTime);
+
+
+
+
 // Material
 const material = new THREE.ShaderMaterial({
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
     side: THREE.DoubleSide,
     uniforms: {
-        uTime: uTime,
+        uTime: {value: 0},
     },
-    needsUpdate: true,
+
 
 })
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+material.needsUpdate = true;
 scene.add(mesh)
 
 /**
@@ -92,12 +95,13 @@ const clock = new THREE.Clock();
 
 const tick = () =>
 {
+
     // Update controls
     controls.update()
 
     const elapsedTime = clock.getElapsedTime();
-    uTime = elapsedTime;
-    // material.update()
+    material.uniforms.uTime.value = elapsedTime
+
     // console.log(Math.floor(elapsedTime));
 
 
